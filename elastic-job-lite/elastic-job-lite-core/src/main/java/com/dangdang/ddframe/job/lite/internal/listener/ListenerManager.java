@@ -79,7 +79,9 @@ public final class ListenerManager {
         shardingListenerManager.start();
         failoverListenerManager.start();
         monitorExecutionListenerManager.start();
+        //关闭定时任务  TODO   去掉
         shutdownListenerManager.start();
+
         triggerListenerManager.start();
         rescheduleListenerManager.start();
         guaranteeListenerManager.start();

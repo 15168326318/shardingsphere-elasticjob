@@ -22,6 +22,7 @@ import com.dangdang.ddframe.job.lite.internal.listener.AbstractListenerManager;
 import com.dangdang.ddframe.job.lite.internal.schedule.JobRegistry;
 import com.dangdang.ddframe.job.lite.internal.schedule.SchedulerFacade;
 import com.dangdang.ddframe.job.reg.base.CoordinatorRegistryCenter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent.Type;
 
 /**
@@ -29,6 +30,7 @@ import org.apache.curator.framework.recipes.cache.TreeCacheEvent.Type;
  * 
  * @author zhangliang
  */
+@Slf4j
 public final class ShutdownListenerManager extends AbstractListenerManager {
     
     private final String jobName;
@@ -58,6 +60,7 @@ public final class ShutdownListenerManager extends AbstractListenerManager {
         protected void dataChanged(final String path, final Type eventType, final String data) {
             if (!JobRegistry.getInstance().isShutdown(jobName) && !JobRegistry.getInstance().getJobScheduleController(jobName).isPaused()
                     && isRemoveInstance(path, eventType) && !isReconnectedRegistryCenter()) {
+                log.info(" 运行实例关闭监听管理器:"+path+",eventType:"+eventType.name()+",data:"+data);
                 schedulerFacade.shutdownInstance();
             }
         }
